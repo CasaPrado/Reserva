@@ -3,38 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  name         String
-  email        String        @unique
-  password     String
-  accessLevel  AccessLevel   @default(user)
-  createdAt    DateTime      @default(now())
-  reservations Reservation[]
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
 }
 
 model Room {
-  id           Int           @id @default(autoincrement())
-  name         String
-  capacity     Int
-  location     String?
-  createdAt    DateTime      @default(now())
-  reservations Reservation[]
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
 }
 
 model Reservation {
-  id        Int      @id @default(autoincrement())
-  roomId    Int
-  userId    Int
-  startTime DateTime
-  endTime   DateTime
-  createdAt DateTime @default(now())
-  room      Room     @relation(fields: [roomId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  roomId String
 }
 
 enum AccessLevel {
