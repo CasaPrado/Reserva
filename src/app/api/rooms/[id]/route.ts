@@ -15,7 +15,7 @@ export async function GET(
 
   try {
     const room = await prisma.room.findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id: params.id }, // Não usar parseInt para IDs que são strings
       include: {
         reservations: {
           include: {
@@ -56,7 +56,7 @@ export async function DELETE(
 
   try {
     const room = await prisma.room.delete({
-      where: { id: parseInt(params.id) },
+      where: { id: params.id }
     });
 
     return NextResponse.json(room);
@@ -81,7 +81,7 @@ export async function PUT(
     const { name, capacity, location } = body;
 
     const updatedRoom = await prisma.room.update({
-      where: { id: parseInt(params.id) },
+      where: { id: params.id },
       data: {
         name,
         capacity,
@@ -118,7 +118,7 @@ export async function POST(
     // Verificar se já existe uma reserva para o horário solicitado
     const existingReservation = await prisma.reservation.findFirst({
       where: {
-        roomId: parseInt(params.id),
+        roomId: params.id,
         OR: [
           {
             AND: [
@@ -142,8 +142,8 @@ export async function POST(
 
     const newReservation = await prisma.reservation.create({
       data: {
-        roomId: parseInt(params.id),
-        userId: parseInt(session.user.id),
+        roomId: params.id,
+        userId: session.user.id,
         startTime: startDateTime,
         endTime: endDateTime,
       },
