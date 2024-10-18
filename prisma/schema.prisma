@@ -8,18 +8,34 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String   @unique
+  password    String
+  accessLevel AccessLevel @default(user)
+  createdAt   DateTime @default(now())
+  reservations Reservation[] @relation("UserReservations")
 }
 
 model Room {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  capacity  Int
+  location  String?
+  createdAt DateTime @default(now())
+  reservations Reservation[] @relation("RoomReservations")
 }
 
 model Reservation {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  roomId String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  roomId    String
+  userId    String
+  startTime DateTime
+  endTime   DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation("UserReservations", fields: [userId], references: [id])
+  room      Room     @relation("RoomReservations", fields: [roomId], references: [id])
 }
 
 enum AccessLevel {
