@@ -14,7 +14,7 @@ export async function PUT(req: Request) {
     const { currentPassword, newPassword } = await req.json();
 
     try {
-        const user = await prisma.user.findUnique({ where: { id: parseInt(session.user.id) } });
+        const user = await prisma.user.findUnique({ where: { id: session.user.id } });
 
         if (!user) {
             return NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 });
@@ -29,7 +29,7 @@ export async function PUT(req: Request) {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         await prisma.user.update({
-            where: { id: parseInt(session.user.id) },
+            where: { id:session.user.id },
             data: { password: hashedPassword },
         });
 
