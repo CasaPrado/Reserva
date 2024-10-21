@@ -49,9 +49,6 @@ export default function Home() {
               <Link href="/login">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700">Entrar</Button>
               </Link>
-              <Link href="/register">
-                <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">Registrar</Button>
-              </Link>
             </div>
           </div>
           <div className="hidden md:block">
